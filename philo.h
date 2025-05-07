@@ -9,7 +9,7 @@
 #include <sys/time.h>
 #include <stdbool.h>
 #include <limits.h>
-
+#include "ft_printf/ft_printf.h"
 
 typedef enum	s_status
 {
@@ -54,5 +54,20 @@ typedef struct	s_simulation
 	pthread_mutex_t	meal_mutex;
 	pthread_mutex_t	end_mutex;
 }				t_simulation;
+
+
+//Fonksiyon isimleri
+
+//Main
+int	parse_argument(int argc, char **argv, t_simulation *simulation);
+int	validate_argument(t_simulation *simulation);
+
+
+//utils
+int	ft_atoi(char *str);
+
+//Error
+int	err_message(char *message);
+
 
 #endif
