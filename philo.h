@@ -9,7 +9,6 @@
 #include <sys/time.h>
 #include <stdbool.h>
 #include <limits.h>
-#include "ft_printf/ft_printf.h"
 
 typedef enum	s_status
 {
@@ -22,10 +21,10 @@ typedef enum	s_status
 
 typedef struct	s_fork
 {
-    pthread_mutex_t    mutex;
-    int                id;
-    int                status;
-}				t_fork;
+    pthread_mutex_t	mutex;
+    int				id;
+    int				status;
+}					t_fork;
 
 typedef struct	s_philosopher
 {
@@ -41,11 +40,11 @@ typedef struct	s_philosopher
 
 typedef struct	s_simulation
 {
-	int				number_of_philosophers;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				number_of_meals;
+	int				number_of_philosophers; //Filozof sayısı
+	int				time_to_die;			//Bir filozofun son yediği yemekten itibaren bu süre içinde yemek yememesi durumunda öleceği süre
+	int				time_to_eat;			//Bir filozofun yemek yediği süre
+	int				time_to_sleep;			//Bir filozofun uyuduğu süre
+	int				number_of_meals;		//Her filozofun en az bu kadar kez yemek yemesi gerekir "isteğe bağlı".
 	bool			simulation_end;
 	long long		start_time;
 	t_philosopher	*philosophers;
@@ -59,7 +58,10 @@ typedef struct	s_simulation
 //Fonksiyon isimleri
 
 //Main
-int	parse_argument(int argc, char **argv, t_simulation *simulation);
+int	init_sim(int argc, char **argv, t_simulation *simulation);
+int	validate_argument(t_simulation *simulation);
+
+//validate
 int	validate_argument(t_simulation *simulation);
 
 
@@ -68,6 +70,9 @@ int	ft_atoi(char *str);
 
 //Error
 int	err_message(char *message);
+
+//init_sim
+int	init_sim(int argc, char **argv, t_simulation *simulation);
 
 
 #endif

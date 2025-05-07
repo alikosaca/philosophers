@@ -121,7 +121,7 @@ PRINTF_SRCS_PREFIXED = $(addprefix $(PRINTF_DIR), $(PRINTF_SRCS))
 # default
 COMPILE.def = $(M2C) $(M2FLAGS) $(DEFFLAGS) $(TARGET_ARCH)
 # makefile (from 'Makefile', line 19)
-PRINTF_DIR = ft_printf/
+PRINTF_DIR = printf/
 # default
 CTANGLE = ctangle
 # automatic
@@ -145,7 +145,7 @@ OBJS = $(SRCS:.c=.o) $(PRINTF_OBJS)
 # makefile
 SHELL = /bin/sh
 # makefile (from 'Makefile', line 35)
-HEADERS = philo.h $(PRINTF_DIR)ft_printf.h
+HEADERS = philo.h $(PRINTF_DIR)printf.h
 # default
 LINK.F = $(FC) $(FFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
 # environment
@@ -269,7 +269,7 @@ MAKE_TERMERR := /dev/pts/6
 # environment
 HOME = /root
 # makefile (from 'Makefile', line 20)
-PRINTF_SRCS = ft_printf.c ft_print_char.c ft_print_string.c ft_print_number.c ft_print_unsigned.c ft_print_hex.c ft_print_pointer.c ft_print_percent.c ft_utils.c
+PRINTF_SRCS = printf.c ft_print_char.c ft_print_string.c ft_print_number.c ft_print_unsigned.c ft_print_hex.c ft_print_pointer.c ft_print_percent.c ft_utils.c
 # default
 LEX = lex
 # environment
@@ -308,17 +308,17 @@ COMPILE.cc = $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
 # Directories
 
 # RCS: could not be stat'd.
-# ft_printf/RCS: could not be stat'd.
+# printf/RCS: could not be stat'd.
 # SCCS: could not be stat'd.
 # . (device 84, inode 2814749767106597): 15 files, 22 impossibilities.
-# ft_printf (device 84, inode 11540474045139599): 14 files, no impossibilities.
-# ft_printf/SCCS: could not be stat'd.
+# printf (device 84, inode 11540474045139599): 14 files, no impossibilities.
+# printf/SCCS: could not be stat'd.
 
 # 29 files, 22 impossibilities in 6 directories.
 
 # Implicit Rules
 
-%.o: %.c philo.h ft_printf/ft_printf.h
+%.o: %.c philo.h printf/printf.h
 #  recipe to execute (from 'Makefile', line 44):
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -784,7 +784,7 @@ time_utils.o:
 #  File has not been updated.
 
 # Not a target:
-ft_printf/ft_print_unsigned.o:
+printf/ft_print_unsigned.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -856,7 +856,7 @@ Makefile:
 #  File has not been updated.
 
 # Not a target:
-ft_printf/ft_utils.o:
+printf/ft_utils.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -880,7 +880,7 @@ ft_printf/ft_utils.o:
 	$(TEXI2DVI) $(TEXI2DVI_FLAGS) $<
 
 # Not a target:
-ft_printf/ft_printf.h:
+printf/printf.h:
 #  Implicit rule search has been done.
 #  Last modified 2025-05-02 17:53:22.3140318
 #  File has been updated.
@@ -903,7 +903,7 @@ philo.h:
 
 # Not a target:
 pdated.
-ft_printf/ft_print_string.o:
+printf/ft_print_string.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -979,7 +979,7 @@ clean:
 	$(LINK.F) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 # Not a target:
-ft_printf/ft_printf.o:
+printf/printf.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -1009,7 +1009,7 @@ re: fclean all
 #  File has not been updated.
 
 # Not a target:
-ft_printf/ft_print_number.o:
+printf/ft_print_number.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -1060,7 +1060,7 @@ monitor.o:
 #  File has not been updated.
 
 # Not a target:
-ft_printf/ft_print_char.o:
+printf/ft_print_char.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -1090,7 +1090,7 @@ all: philo
 # Load=0/32=0%, Rehash=0, Collisions=0/5=0%
 
 # Not a target:
-ft_printf/ft_print_percent.o:
+printf/ft_print_percent.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -1130,7 +1130,7 @@ fclean: clean
 #  File has not been updated.
 
 # Not a target:
-ft_printf/ft_print_hex.o:
+printf/ft_print_hex.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -1192,7 +1192,7 @@ main.c:
 #  File has been updated.
 #  Successfully updated.
 
-main.o: main.c philo.h ft_printf/ft_printf.h
+main.o: main.c philo.h printf/printf.h
 #  Implicit rule search has been done.
 #  Implicit/static pattern stem: 'main'
 #  Modification time never checked.
@@ -1205,12 +1205,12 @@ main.o: main.c philo.h ft_printf/ft_printf.h
 # automatic
 # < := main.c
 # automatic
-# + := main.c philo.h ft_printf/ft_printf.h
+# + := main.c philo.h printf/printf.h
 # automatic
 # % := 
 # automatic
 # automatic
-# ? := main.c philo.h ft_printf/ft_printf.h
+# ? := main.c philo.h printf/printf.h
 # automatic
 # | := 
 # variable set hash-table stats:
@@ -1294,7 +1294,7 @@ main.o: main.c philo.h ft_printf/ft_printf.h
 #  Modification time never checked.
 #  File has not been updated.
 
-philo: main.o parse_arguments.o init_simulation.o simulation.o philosopher_actions.o monitor.o utils.o time_utils.o cleanup.o ft_printf/ft_printf.o ft_printf/ft_print_char.o ft_printf/ft_print_string.o ft_printf/ft_print_number.o ft_printf/ft_print_unsigned.o ft_printf/ft_print_hex.o ft_printf/ft_print_pointer.o ft_printf/ft_print_percent.o ft_printf/ft_utils.o
+philo: main.o parse_arguments.o init_simulation.o simulation.o philosopher_actions.o monitor.o utils.o time_utils.o cleanup.o printf/printf.o printf/ft_print_char.o printf/ft_print_string.o printf/ft_print_number.o printf/ft_print_unsigned.o printf/ft_print_hex.o printf/ft_print_pointer.o printf/ft_print_percent.o printf/ft_utils.o
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
@@ -1305,7 +1305,7 @@ philo: main.o parse_arguments.o init_simulation.o simulation.o philosopher_actio
 	@echo "\033[32mFilozoflar programı başarıyla derlendi!\033[0m"
 
 # Not a target:
-ft_printf/ft_print_pointer.o:
+printf/ft_print_pointer.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.

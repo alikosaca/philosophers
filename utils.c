@@ -6,7 +6,7 @@
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:43:51 by akosaca           #+#    #+#             */
-/*   Updated: 2025/05/03 13:19:21 by akosaca          ###   ########.fr       */
+/*   Updated: 2025/05/07 17:39:44 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ int	ft_atoi(char *str)
 		i++;
 	}
 
-	while (str[i])
+	while (str[i] >= '0' && str[i] <= '9')
 	{
-		res = res * 10 + i - 48;
+		res = res * 10 + str[i] - 48;
 		i++;
 	}
 

@@ -1,42 +1,25 @@
-NAME = philo
+NAME    = philo
 
-CC = cc
+CC      = cc
+CFLAGS  = -Wall -Wextra -Werror -pthread
 
-CFLAGS = -Wall -Wextra -Werror -pthread
+RM      = rm -f
 
-RM = rm -f
-
-FT_PRINTF_PATH = ft_printf
-
-FT_PRINTF = $(FT_PRINTF_PATH)/ft_printf.a
-
-SRCS = main.c \
-	   parse_arguments.c \
-	   init_simulation.c \
-	   simulation.c \
-	   philosopher_actions.c \
-	   monitor.c \
-	   utils.c \
-	   time_utils.c \
-	   cleanup.c
-
-OBJS = $(SRCS:.c=.o)
+SRCS    = main.c  \
+		  error.c \
+          utils.c
+OBJS    = $(SRCS:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJS) $(FT_PRINTF)
-	$(CC) $(CFLAGS) $(OBJS) $(FT_PRINTF) -o $(NAME)
-
-$(FT_PRINTF):
-	make -C $(FT_PRINTF_PATH)
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 clean:
 	$(RM) $(OBJS)
-	make -C $(FT_PRINTF_PATH) clean
 
 fclean: clean
 	$(RM) $(NAME)
-	make -C $(FT_PRINTF_PATH) fclean
 
 re: fclean all
 
