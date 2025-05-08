@@ -23,7 +23,7 @@ typedef struct	s_fork
 {
     pthread_mutex_t	mutex;
     int				id;
-    int				status;
+    bool			status;
 }					t_fork;
 
 typedef struct	s_philosopher
@@ -40,7 +40,7 @@ typedef struct	s_philosopher
 
 typedef struct	s_simulation
 {
-	int				number_of_philosophers; //Filozof sayısı
+	int				num_philo; //Filozof sayısı
 	int				time_to_die;			//Bir filozofun son yediği yemekten itibaren bu süre içinde yemek yememesi durumunda öleceği süre
 	int				time_to_eat;			//Bir filozofun yemek yediği süre
 	int				time_to_sleep;			//Bir filozofun uyuduğu süre
@@ -57,12 +57,11 @@ typedef struct	s_simulation
 
 //Fonksiyon isimleri
 
-//Main
+//init_sim
 int	init_sim(int argc, char **argv, t_simulation *simulation);
-int	validate_argument(t_simulation *simulation);
 
 //validate
-int	validate_argument(t_simulation *simulation);
+int	validate_argument(int argc, char **argv, t_simulation *simulation);
 
 
 //utils
