@@ -40,7 +40,7 @@ typedef struct	s_philosopher
 
 typedef struct	s_simulation
 {
-	int				num_philo; //Filozof sayısı
+	int				num_philo;				//Filozof sayısı
 	int				time_to_die;			//Bir filozofun son yediği yemekten itibaren bu süre içinde yemek yememesi durumunda öleceği süre
 	int				time_to_eat;			//Bir filozofun yemek yediği süre
 	int				time_to_sleep;			//Bir filozofun uyuduğu süre
@@ -49,7 +49,8 @@ typedef struct	s_simulation
 	long long		start_time;
 	t_philosopher	*philosophers;
 	t_fork			*forks;
-	pthread_mutex_t	write_mutex;
+	pthread_mutex_t	write_mutex;			/*ekrana yazma işlemi gerçekleşirken bir ekrana yazan işlemin bitmesini bekiyoruz.
+												yani diyelim ki A filozofunun uyuduğunu ekrana yazacağız. onu lock yaparıyrouz. aynı anda birden fazla filozof yapmış olduğu durumu ekrnaa yazmasını engelemek/karışıklık olmasını engellemek için kullanıyoruz*/
 	pthread_mutex_t	meal_mutex;
 	pthread_mutex_t	end_mutex;
 }				t_simulation;
@@ -68,10 +69,16 @@ int	validate_argument(int argc, char **argv, t_simulation *simulation);
 int	ft_atoi(char *str);
 
 //Error
-int	err_message(char *message);
+int	return_err(char *message);
+int	free_and_error(char *str, t_simulation *simulation);
+
+
 
 //init_sim
 int	init_sim(int argc, char **argv, t_simulation *simulation);
+
+//simulastion
+int	simulastion_action(t_simulation *simulastion);
 
 
 #endif

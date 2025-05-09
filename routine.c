@@ -1,24 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/03 13:26:19 by akosaca           #+#    #+#             */
-/*   Updated: 2025/05/09 18:47:57 by akosaca          ###   ########.fr       */
+/*   Created: 2025/05/09 17:55:12 by akosaca           #+#    #+#             */
+/*   Updated: 2025/05/09 18:15:29 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	return_err(char *message)
+//* rutinleri buradan işleme sokuyoruz
+
+void	think()
 {
-	printf("%s\n", message);
-	return (1);
+
 }
-int	free_and_error(char *str, t_simulation *simulation)
+
+void	dream()
 {
-	//! Yazılacak...
-	return (1);
+	
+}
+
+void	eat()
+{
+
 }

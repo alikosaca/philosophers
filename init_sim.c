@@ -6,11 +6,10 @@
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:26:02 by akosaca           #+#    #+#             */
-/*   Updated: 2025/05/08 20:26:01 by akosaca          ###   ########.fr       */
+/*   Updated: 2025/05/09 18:50:08 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//! bir sonraki philoya geçmiyor
 #include "philo.h"
 
 static int	init_fork(t_simulation	*simulation)
@@ -20,7 +19,7 @@ static int	init_fork(t_simulation	*simulation)
 	i = 0;
 	simulation->forks = malloc(simulation->num_philo * sizeof(t_fork));
 	if (!simulation->forks)
-		return (err_message("Ups! init error occurred"));
+		return (return_err("Ups! init error occurred"));
 	while (i < simulation->num_philo)
 	{
 		
@@ -31,24 +30,33 @@ static int	init_fork(t_simulation	*simulation)
 	}
 	return (0);
 }
-
+//! thread başlatma işlemini gerçekelştirmedik
+//! simulation->philosophers[i].thread = 0; olarak ayarladık  
 static int	init_philo(t_simulation	*simulation)
 {
 	int	i;
 
 	i = 0;
 	simulation->philosophers = malloc(simulation->num_philo * sizeof(t_fork));
+	if (!simulation)
+		return (return_err("Ups! init error occurred"));
 	while (i < simulation->num_philo)
 	{
 		simulation->philosophers[i].id = i;
 		simulation->philosophers[i].eat_count = 0;
+		simulation->philosophers[i].right_fork = NULL;
+		simulation->philosophers[i].left_fork = NULL;
+		simulation->philosophers[i].last_meal_time = NULL;
+		simulation->philosophers[i].thread = 0;
 		simulation->philosophers[i].is_eating = false;
+		i++;
 	}
 	return (0);
 }
 
 static int	init_input(int argc, char **argv, t_simulation *simulation)
 {
+	
 	simulation->num_philo = ft_atoi(argv[1]);
 	simulation->time_to_die = ft_atoi(argv[2]);
 	simulation->time_to_eat = ft_atoi(argv[3]);
@@ -71,7 +79,6 @@ int	init_sim(int argc, char **argv, t_simulation *simulation)
 		return (1);
 	if (init_philo(&simulation))
 		return (1);
-
 	return (0);
 }
 /*
