@@ -12,8 +12,8 @@
 
 typedef enum	s_status
 {
-	DEAD = 0,
-	EATTING = 1,
+	EATTING = 0,
+	DEAD = 1,
 	SLEEPING = 2,
 	THINKING = 3,
 	FORK_TAKEN = 3,
@@ -45,14 +45,17 @@ typedef struct	s_simulation
 	int				time_to_eat;			//Bir filozofun yemek yediği süre
 	int				time_to_sleep;			//Bir filozofun uyuduğu süre
 	int				number_of_meals;		//Her filozofun en az bu kadar kez yemek yemesi gerekir "isteğe bağlı".
+	int				*is_dead;
 	bool			simulation_end;
 	long long		start_time;
+
+	pthread_mutex_t	*write_mutex;			/*ekrana yazma işlemi gerçekleşirken bir ekrana yazan işlemin bitmesini bekiyoruz. yani diyelim ki A filozofunun uyuduğunu ekrana yazacağız. onu lock yaparıyrouz. aynı anda birden fazla filozof yapmış olduğu durumu ekrnaa yazmasını engelemek/karışıklık olmasını engellemek için kullanıyoruz*/
+	pthread_mutex_t	*dead_lock;
+	pthread_mutex_t	*meal_mutex;
+	pthread_mutex_t	*end_mutex;
+
 	t_philosopher	*philosophers;
 	t_fork			*forks;
-	pthread_mutex_t	write_mutex;			/*ekrana yazma işlemi gerçekleşirken bir ekrana yazan işlemin bitmesini bekiyoruz.
-												yani diyelim ki A filozofunun uyuduğunu ekrana yazacağız. onu lock yaparıyrouz. aynı anda birden fazla filozof yapmış olduğu durumu ekrnaa yazmasını engelemek/karışıklık olmasını engellemek için kullanıyoruz*/
-	pthread_mutex_t	meal_mutex;
-	pthread_mutex_t	end_mutex;
 }				t_simulation;
 
 
@@ -67,11 +70,15 @@ int	validate_argument(int argc, char **argv, t_simulation *simulation);
 
 //utils
 int	ft_atoi(char *str);
+int	get_current_time(void);
+
 
 //Error
 int	return_err(char *message);
 int	free_and_error(char *str, t_simulation *simulation);
 
+//thread_sim
+int	check_any_dead(t_simulation *sim);
 
 
 //init_sim
@@ -79,6 +86,9 @@ int	init_sim(int argc, char **argv, t_simulation *simulation);
 
 //simulastion
 int	simulastion_action(t_simulation *simulastion);
+
+//handle
+void	print_message(char *str, t_simulation *sim);
 
 
 #endif

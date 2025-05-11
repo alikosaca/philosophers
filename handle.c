@@ -1,30 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   routine.c                                          :+:      :+:    :+:   */
+/*   handle.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/09 17:55:12 by akosaca           #+#    #+#             */
-/*   Updated: 2025/05/11 13:10:03 by akosaca          ###   ########.fr       */
+/*   Created: 2025/05/11 12:38:02 by akosaca           #+#    #+#             */
+/*   Updated: 2025/05/11 13:07:34 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-//* rutinleri buradan işleme sokuyoruz
-
-void	think(t_simulation *sim)
+void	print_message(char *str, t_simulation *sim)
 {
-	print_message("is thinking", sim);
-}
+	int	time;
 
-void	dream()
-{
-	
-}
-
-void	eat()
-{
-
+	pthread_mutex_lock(sim->write_mutex);
+	time = get_current_time() - sim->start_time;
+	if (check_any_dead(sim) != DEAD)
+		printf("%d %d %s\n", time, sim->philosophers->id, str);
+	pthread_mutex_unlock(sim->write_mutex);
 }
