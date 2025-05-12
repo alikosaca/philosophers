@@ -1,14 +1,21 @@
-NAME    = philo
+NAME = philo
 
-CC      = cc
-CFLAGS  = -Wall -Wextra -Werror -pthread
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -pthread
 
-RM      = rm -f
+RM = rm -f
 
-SRCS    = main.c  \
-		  error.c \
-          utils.c
-OBJS    = $(SRCS:.c=.o)
+SRCS = main.c \
+       error.c \
+       utils.c \
+       handle.c \
+       init_sim.c \
+       routine.c \
+       run_simulation.c \
+       thread_sim.c \
+       validate.c
+
+OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
 

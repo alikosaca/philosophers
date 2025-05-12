@@ -6,14 +6,14 @@
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:24:33 by akosaca           #+#    #+#             */
-/*   Updated: 2025/05/09 18:50:01 by akosaca          ###   ########.fr       */
+/*   Updated: 2025/05/12 15:43:23 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 //? All error message will change
-int	validate_argument(char argc, char **argv, t_simulation *simulation)
+int	validate_argument(int argc, char **argv)
 {
 	if (argc < 5 || argc > 6)
 		return(return_err("İnvalid Argument digit"));

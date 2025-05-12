@@ -6,7 +6,7 @@
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 17:55:12 by akosaca           #+#    #+#             */
-/*   Updated: 2025/05/11 13:10:03 by akosaca          ###   ########.fr       */
+/*   Updated: 2025/05/12 17:00:54 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,13 @@ void	think(t_simulation *sim)
 	print_message("is thinking", sim);
 }
 
-void	dream()
+void	dream(t_simulation *sim)
 {
-	
+	print_message("is sleeping", sim);
+	ft_usleep(sim->time_to_sleep);
 }
 
-void	eat()
+void	eat(void)
 {
-
+	//!
 }

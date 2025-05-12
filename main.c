@@ -6,7 +6,7 @@
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:07:37 by akosaca           #+#    #+#             */
-/*   Updated: 2025/05/09 18:10:24 by akosaca          ###   ########.fr       */
+/*   Updated: 2025/05/12 17:00:32 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 
 int main(int argc, char **argv)
 {
-	t_simulation	simulastion;
+	t_simulation	sim;
 
-	if (validate_argument(argc, argv, &simulastion))
+	if (validate_argument(argc, argv))
 		return (1);
-	if (init_sim(argc, argv, &simulastion))
+	if (init_sim(argc, argv, &sim))
 		return (1);
-	if (simulastion_action(&simulastion))
+	if (run_simulation(&sim))
 		return (1);
-	
-	return 0;
+
+	return (0);
 }

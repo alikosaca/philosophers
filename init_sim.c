@@ -6,82 +6,124 @@
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:26:02 by akosaca           #+#    #+#             */
-/*   Updated: 2025/05/09 18:50:08 by akosaca          ###   ########.fr       */
+/*   Updated: 2025/05/12 17:44:33 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int	init_fork(t_simulation	*simulation)
+static int	init_fork(t_simulation	*sim)
 {
 	int	i;
 
 	i = 0;
-	simulation->forks = malloc(simulation->num_philo * sizeof(t_fork));
-	if (!simulation->forks)
+	sim->forks = malloc(sim->num_philo * sizeof(t_fork));
+	if (!sim->forks)
 		return (return_err("Ups! init error occurred"));
-	while (i < simulation->num_philo)
+	while (i < sim->num_philo)
 	{
-		
-		simulation->forks[i].id = i;
-		simulation->forks[i].status = true;
-		pthread_mutex_init(&simulation->forks[i].mutex, NULL);
-		i++;
-	}
-	return (0);
-}
-//! thread başlatma işlemini gerçekelştirmedik
-//! simulation->philosophers[i].thread = 0; olarak ayarladık  
-static int	init_philo(t_simulation	*simulation)
-{
-	int	i;
-
-	i = 0;
-	simulation->philosophers = malloc(simulation->num_philo * sizeof(t_fork));
-	if (!simulation)
-		return (return_err("Ups! init error occurred"));
-	while (i < simulation->num_philo)
-	{
-		simulation->philosophers[i].id = i;
-		simulation->philosophers[i].eat_count = 0;
-		simulation->philosophers[i].right_fork = NULL;
-		simulation->philosophers[i].left_fork = NULL;
-		simulation->philosophers[i].last_meal_time = NULL;
-		simulation->philosophers[i].thread = 0;
-		simulation->philosophers[i].is_eating = false;
+		sim->forks[i].id = i;
+		sim->forks[i].status = true;
+		pthread_mutex_init(&sim->forks[i].mutex, NULL);
 		i++;
 	}
 	return (0);
 }
 
-static int	init_input(int argc, char **argv, t_simulation *simulation)
+static int	init_philo(t_simulation	*sim)
 {
-	
-	simulation->num_philo = ft_atoi(argv[1]);
-	simulation->time_to_die = ft_atoi(argv[2]);
-	simulation->time_to_eat = ft_atoi(argv[3]);
-	simulation->time_to_sleep = ft_atoi(argv[4]);
-	simulation->number_of_meals = -1;
-	simulation->simulation_end = false;
-	simulation->start_time = 0;
-	simulation->philosophers = NULL;
-	simulation->forks = NULL;	
+	int	i;
+
+	i = 0;
+	sim->philo = malloc(sim->num_philo * sizeof(t_philosopher));
+	if (!sim->philo)
+		return (return_err("Ups! init error occurred"));
+	while (i < sim->num_philo)
+	{
+		sim->philo[i].id = i;
+		sim->philo[i].eat_count = 0;
+		sim->philo[i].right_fork = NULL;
+		sim->philo[i].left_fork = NULL;
+		sim->philo[i].last_meal_time = 0;
+		sim->philo[i].thread = 0;
+		sim->philo[i].is_eating = false;
+		sim->philo[i].simulation = sim;
+		i++;
+	}
+	return (0);
+}
+
+static	int	assign_forks_to_philos(t_simulation *sim)
+{
+	int	i;
+
+	i = 0;
+	while (i < sim->num_philo)
+	{
+		sim->philo[i].right_fork = &sim->forks[i];
+		if (i == 0)
+			sim->philo[i].left_fork = &sim->forks[sim->num_philo - 1];
+		else
+			sim->philo[i].left_fork = &sim->forks[i - 1];
+		sim->philo[i].simulation = sim; //*connection reference sim -> sim
+		i++;
+	}
+	return (0);
+}
+
+static int	init_input(int argc, char **argv, t_simulation *sim)
+{
+	sim->num_philo = ft_atoi(argv[1]);
+	sim->time_to_die = ft_atoi(argv[2]);
+	sim->time_to_eat = ft_atoi(argv[3]);
+	sim->time_to_sleep = ft_atoi(argv[4]);
+	sim->number_of_meals = -1;
+	sim->simulation_end = false;
+	sim->start_time = 0;
+	sim->philo = NULL;
+	sim->forks = NULL;
 	if (argc == 6)
-		simulation->number_of_meals = ft_atoi(argv[5]);
+		sim->number_of_meals = ft_atoi(argv[5]);
+	else
+		sim->number_of_meals = 1; //*for loop_routine
 	return (0);
 }
 
-int	init_sim(int argc, char **argv, t_simulation *simulation)
+static int init_mutexes(t_simulation *sim)
 {
-	if (init_input(argc, argv, &simulation))
-		return (1);
-	if (init_fork(&simulation))
-		return (1);
-	if (init_philo(&simulation))
-		return (1);
+	sim->write_mutex = malloc(sizeof(pthread_mutex_t));
+	sim->dead_lock = malloc(sizeof(pthread_mutex_t));
+	sim->meal_mutex = malloc(sizeof(pthread_mutex_t));
+	sim->end_mutex = malloc(sizeof(pthread_mutex_t));
+
+	if (!sim->write_mutex || !sim->dead_lock || \
+		!sim->meal_mutex || !sim->end_mutex)
+		return (return_err("Mutex memory allocation failed"));
+
+	pthread_mutex_init(sim->write_mutex, NULL);
+	pthread_mutex_init(sim->dead_lock, NULL);
+	pthread_mutex_init(sim->meal_mutex, NULL);
+	pthread_mutex_init(sim->end_mutex, NULL);
+
+	sim->is_dead = malloc(sizeof(int));
+	if (!sim->is_dead)
+		return (return_err("Memory allocation failed"));
+	*(sim->is_dead) = 0;
+
 	return (0);
 }
-/*
 
-
-*/
+int	init_sim(int argc, char **argv, t_simulation *sim)
+{
+    if (init_input(argc, argv, sim))
+        return (1);
+    if (init_mutexes(sim))
+        return (1);
+    if (init_fork(sim))
+        return (1);
+    if (init_philo(sim))
+        return (1);
+    if (assign_forks_to_philos(sim))
+        return (1);
+    return (0);
+}

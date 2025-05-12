@@ -54,7 +54,7 @@ typedef struct	s_simulation
 	pthread_mutex_t	*meal_mutex;
 	pthread_mutex_t	*end_mutex;
 
-	t_philosopher	*philosophers;
+	t_philosopher	*philo;
 	t_fork			*forks;
 }				t_simulation;
 
@@ -62,30 +62,31 @@ typedef struct	s_simulation
 //Fonksiyon isimleri
 
 //init_sim
-int	init_sim(int argc, char **argv, t_simulation *simulation);
+int	init_sim(int argc, char **argv, t_simulation *sim);
 
 //validate
-int	validate_argument(int argc, char **argv, t_simulation *simulation);
+int	validate_argument(int argc, char **argv);
 
 
 //utils
 int	ft_atoi(char *str);
 int	get_current_time(void);
+void	ft_usleep(long long time_in_ms);
 
 
 //Error
 int	return_err(char *message);
-int	free_and_error(char *str, t_simulation *simulation);
+int	free_and_error(char *str, t_simulation *sim);
 
 //thread_sim
 int	check_any_dead(t_simulation *sim);
 
 
 //init_sim
-int	init_sim(int argc, char **argv, t_simulation *simulation);
+int	init_sim(int argc, char **argv, t_simulation *sim);
 
 //simulastion
-int	simulastion_action(t_simulation *simulastion);
+int	c_action(t_simulation *sim);
 
 //handle
 void	print_message(char *str, t_simulation *sim);
