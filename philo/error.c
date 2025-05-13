@@ -1,28 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/15 14:07:37 by akosaca           #+#    #+#             */
-/*   Updated: 2025/05/12 17:00:32 by akosaca          ###   ########.fr       */
+/*   Created: 2025/05/03 13:26:19 by akosaca           #+#    #+#             */
+/*   Updated: 2025/05/13 20:12:28 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-
-int main(int argc, char **argv)
+int	return_err(const char *message)
 {
-	t_simulation	sim;
-
-	if (validate_argument(argc, argv))
-		return (1);
-	if (init_sim(argc, argv, &sim))
-		return (1);
-	if (run_simulation(&sim))
-		return (1);
-
-	return (0);
+	printf("%s\n", message);
+	return (1);
 }
+// int	free_and_error(char *str, t_simulation *simulation)
+// {
+// 	//! Yazılacak...
+// 	return (1);
+// }

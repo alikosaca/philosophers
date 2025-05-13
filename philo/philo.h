@@ -1,14 +1,16 @@
 #ifndef PHILO_H
 # define PHILO_H
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <pthread.h>
-#include <stdio.h>
-#include <sys/wait.h>
-#include <sys/time.h>
-#include <stdbool.h>
-#include <limits.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <pthread.h>
+# include <stdio.h>
+# include <sys/wait.h>
+# include <sys/time.h>
+# include <stdbool.h>
+# include <limits.h>
+
+# include <string.h>
 
 typedef enum	s_status
 {
@@ -21,15 +23,15 @@ typedef enum	s_status
 
 typedef struct	s_fork
 {
-    pthread_mutex_t	mutex;
-    int				id;
-    bool			status;
+	pthread_mutex_t	mutex;
+	int				id;
+	bool			status;
 }					t_fork;
 
 typedef struct	s_philosopher
 {
 	pthread_t			thread;
-	int					id;
+ 	int					id;
 	int					eat_count;
 	t_fork				*left_fork;
 	t_fork				*right_fork;
@@ -45,7 +47,7 @@ typedef struct	s_simulation
 	int				time_to_eat;			//Bir filozofun yemek yediği süre
 	int				time_to_sleep;			//Bir filozofun uyuduğu süre
 	int				number_of_meals;		//Her filozofun en az bu kadar kez yemek yemesi gerekir "isteğe bağlı".
-	int				*is_dead;
+	int				is_dead;
 	bool			simulation_end;
 	long long		start_time;
 
@@ -75,8 +77,8 @@ void	ft_usleep(long long time_in_ms);
 
 
 //Error
-int	return_err(char *message);
-int	free_and_error(char *str, t_simulation *sim);
+int	return_err(const char *message);
+//int	free_and_error(char *str, t_simulation *sim);
 
 //thread_sim
 int	check_any_dead(t_simulation *sim);

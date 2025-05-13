@@ -6,7 +6,7 @@
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:43:51 by akosaca           #+#    #+#             */
-/*   Updated: 2025/05/11 13:24:58 by akosaca          ###   ########.fr       */
+/*   Updated: 2025/05/13 19:23:21 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ int	get_current_time(void)
 
     if (gettimeofday(&tv, NULL) == -1)
 		write(2, "gettimeofday() error\n", 22);
-	return (tv.tv_usec);
+	printf("tv_usec: %ld\n", (tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 void	ft_usleep(long long time_in_ms)
 {
