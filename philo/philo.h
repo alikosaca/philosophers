@@ -77,8 +77,10 @@ void	ft_usleep(long long time_in_ms);
 
 
 //Error
-int	return_err(const char *message);
-//int	free_and_error(char *str, t_simulation *sim);
+int		return_err(const char *message);
+int		cleanup(t_simulation *sim);
+void	destroy_mutex(t_simulation *sim);
+
 
 //thread_sim
 int	check_any_dead(t_simulation *sim);
@@ -92,6 +94,11 @@ int	c_action(t_simulation *sim);
 
 //handle
 void	print_message(char *str, t_simulation *sim);
+
+//routine
+void	think(t_simulation *sim);
+void	dream(t_simulation *sim);
+void	eat(t_simulation *sim);
 
 
 #endif
