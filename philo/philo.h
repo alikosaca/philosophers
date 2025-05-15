@@ -14,18 +14,18 @@
 
 typedef enum	s_status
 {
-	EATTING = 0,
-	DEAD = 1,
-	SLEEPING = 2,
-	THINKING = 3,
-	FORK_TAKEN = 3,
+	ATE = 0,
+	HUNGRY = 1,
+	DEAD = 2,
+	SLEEPING = 3,
+	THINKING = 4
 }				t_status;
 
 typedef struct	s_fork
 {
-	pthread_mutex_t	mutex;
 	int				id;
 	bool			status;
+	pthread_mutex_t	mutex;
 }					t_fork;
 
 typedef struct	s_philosopher
@@ -74,16 +74,13 @@ int	validate_argument(int argc, char **argv);
 int	ft_atoi(char *str);
 int	get_current_time(void);
 void	ft_usleep(long long time_in_ms);
+void take_forks(t_philosopher *p);
 
 
 //Error
 int		return_err(const char *message);
 int		cleanup(t_simulation *sim);
 void	destroy_mutex(t_simulation *sim);
-
-
-//thread_sim
-int	check_any_dead(t_simulation *sim);
 
 
 //init_sim
@@ -93,12 +90,15 @@ int	init_sim(int argc, char **argv, t_simulation *sim);
 int	c_action(t_simulation *sim);
 
 //handle
-void	print_message(char *str, t_simulation *sim);
+void	print_message(char *str, t_philosopher *philo, int id);
+void	print_fork_taken(t_simulation *sim);
+
+
 
 //routine
-void	think(t_simulation *sim);
-void	dream(t_simulation *sim);
-void	eat(t_simulation *sim);
+int	think(t_simulation *sim);
+int	dream(t_simulation *sim);
+int	eat(t_simulation *sim);
 
 
 #endif

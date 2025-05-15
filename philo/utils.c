@@ -6,7 +6,7 @@
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:43:51 by akosaca           #+#    #+#             */
-/*   Updated: 2025/05/13 19:23:21 by akosaca          ###   ########.fr       */
+/*   Updated: 2025/05/15 15:43:30 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,13 @@ void	ft_usleep(long long time_in_ms)
 	start = get_current_time();
 	while ((get_current_time() - start) < time_in_ms)
 		usleep(500);
+}
+void take_forks(t_philosopher *p)
+{
+	//! Yazılacak.
+}
+
+void	check_any_dead(t_simulation *sim)
+{
+	
 }

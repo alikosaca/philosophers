@@ -6,7 +6,7 @@
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 18:06:28 by akosaca           #+#    #+#             */
-/*   Updated: 2025/05/13 21:06:22 by akosaca          ###   ########.fr       */
+/*   Updated: 2025/05/15 20:18:15 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,42 +23,33 @@
 void	*monitor_routine(void *arg)
 {
 	(void) arg;
-	return (NULL);
+	t_simulation	*sim;
+
+	sim = (t_simulation *)arg;
+	pthread_mutex_lock(sim->dead_lock);
+	if (sim->is_dead == DEAD)
+	{
+		pthread_mutex_unlock(sim->dead_lock);
+		return (1);
+	}
+	pthread_mutex_unlock(sim->dead_lock);
+	return (0);
 }
 
 void	*philo_routine(void *arg)
 {
 	(void) arg;
-	t_simulation	*sim;
+	t_philosopher	*philo;
 
-	sim = (t_simulation *)arg;
+	philo = (t_philosopher *)arg;
 
-	if (sim->philo->id % 2 == 0) // Çift numaralı filozoflar için kısa gecikme
+	if (philo->id % 2 == 0) //* Short delay for even numbered philosophers
 		ft_usleep(100);
-	// Loop until the philosopher dies or has enough food
-	while (1)
+	while (!monitor_routine(philo->simulation))
 	{
-		// Ölüm kontrolü
-        
-        // Sol çatalı al
-        
-        // Durum mesajı (fork taken)
-        
-        // Sağ çatalı al
-        
-        // Durum mesajı (fork taken)
-        
-        // Yemek ye
-        
-        // Son yemek zamanını güncelle
-        
-        // Yemek sayısını artır
-        
-        // Çatalları bırak
-        
-        // Uyu
-        
-        // Düşün
+		eat(philo);
+		dream(philo);
+		think(philo);
 	}
 	
 	return (NULL);
@@ -75,7 +66,7 @@ int	run_simulation(t_simulation *sim)
 
 	while (++i < sim->num_philo)
 	{
-		if (pthread_create(&sim->philo[i].thread, NULL, philo_routine, sim))
+		if (pthread_create(&sim->philo[i].thread, NULL, philo_routine, &sim->philo[i]))
 			return (1);
 	}
 	if (pthread_create(&monitor, NULL, monitor_routine, sim))
