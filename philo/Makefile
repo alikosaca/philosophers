@@ -1,7 +1,7 @@
 NAME = philo
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -fsanitize=pthread
+CFLAGS = -Wall -Wextra -Werror -fsanitize=thread
 
 RM = rm -f
 
@@ -12,7 +12,6 @@ SRCS = main.c \
        init_sim.c \
        routine.c \
        run_simulation.c \
-       thread_sim.c \
        validate.c
 
 OBJS = $(SRCS:.c=.o)

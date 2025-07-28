@@ -6,7 +6,7 @@
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:24:33 by akosaca           #+#    #+#             */
-/*   Updated: 2025/05/12 15:43:23 by akosaca          ###   ########.fr       */
+/*   Updated: 2025/07/27 18:55:57 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 int	validate_argument(int argc, char **argv)
 {
 	if (argc < 5 || argc > 6)
-		return(return_err("İnvalid Argument digit"));
+		return (return_err("Invalid Argument digit"));
 	if (ft_atoi(argv[1]) <= 0)
-		return(return_err("The number of Philosophers must be positive"));
+		return (return_err("The number of Philosophers must be positive"));
 	if (ft_atoi(argv[2]) <= 0)
 		return (return_err("The number of Die must be positive"));
 	if (ft_atoi(argv[3]) <= 0)

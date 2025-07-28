@@ -14,11 +14,11 @@
 
 typedef enum	s_status
 {
-	ATE = 0,
-	HUNGRY = 1,
-	DEAD = 2,
-	SLEEPING = 3,
-	THINKING = 4
+	ATE,
+	HUNGRY,
+	DEAD,
+	SLEEPING,
+	THINKING
 }				t_status;
 
 typedef struct	s_fork
@@ -30,13 +30,13 @@ typedef struct	s_fork
 
 typedef struct	s_philosopher
 {
-	pthread_t			thread;
- 	int					id;
+	int					id;
 	int					eat_count;
-	t_fork				*left_fork;
+	pthread_t			thread;
 	t_fork				*right_fork;
+	t_fork				*left_fork;
 	long long			last_meal_time;
-	bool				is_eating;
+	//bool				is_eating;
 	struct s_simulation	*simulation;
 }				t_philosopher;
 
@@ -47,17 +47,17 @@ typedef struct	s_simulation
 	int				time_to_eat;			//Bir filozofun yemek yediği süre
 	int				time_to_sleep;			//Bir filozofun uyuduğu süre
 	int				number_of_meals;		//Her filozofun en az bu kadar kez yemek yemesi gerekir "isteğe bağlı".
-	int				is_dead;
-	bool			simulation_end;
+	bool			is_dead;
+	bool			simulation_end; //? gerek var mı?
 	long long		start_time;
 
-	pthread_mutex_t	*write_mutex;			/*ekrana yazma işlemi gerçekleşirken bir ekrana yazan işlemin bitmesini bekiyoruz. yani diyelim ki A filozofunun uyuduğunu ekrana yazacağız. onu lock yaparıyrouz. aynı anda birden fazla filozof yapmış olduğu durumu ekrnaa yazmasını engelemek/karışıklık olmasını engellemek için kullanıyoruz*/
+	pthread_mutex_t	*write_mutex;			/*ekrana yazma işlemi gerçekleşirken bir ekrana yazan işlemin bitmesini bekiyoruz. yani diyelim ki A filozofunun uyuduğunu ekrana yazacağız. onu lock yaparıyrouz. aynı anda birden fazla filozof yapmış olduğu durumu ekrana yazmasını engelemek/karışıklık olmasını engellemek için kullanıyoruz*/
 	pthread_mutex_t	*dead_lock;
 	pthread_mutex_t	*meal_mutex;
 	pthread_mutex_t	*end_mutex;
 
 	t_philosopher	*philo;
-	t_fork			*forks;
+	t_fork			*forks; //? gerek var mı?
 }				t_simulation;
 
 
@@ -83,22 +83,21 @@ int		cleanup(t_simulation *sim);
 void	destroy_mutex(t_simulation *sim);
 
 
-//init_sim
-int	init_sim(int argc, char **argv, t_simulation *sim);
-
-//simulastion
-int	c_action(t_simulation *sim);
-
 //handle
-void	print_message(char *str, t_philosopher *philo, int id);
+void	print_message(char *str, t_philosopher *philo);
 void	print_fork_taken(t_simulation *sim);
 
 
+//run_simulation
+int		run_simulation(t_simulation *sim);
+void	*philo_routine(void *arg);
+void	*monitor_routine(void *arg);
+
 
 //routine
-int	think(t_simulation *sim);
-int	dream(t_simulation *sim);
-int	eat(t_simulation *sim);
+int	think(t_philosopher *philo);
+int	dream(t_philosopher *philo);
+int	eat(t_philosopher *philo);
 
 
 #endif
