@@ -6,7 +6,7 @@
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:26:02 by akosaca           #+#    #+#             */
-/*   Updated: 2025/07/28 17:55:54 by akosaca          ###   ########.fr       */
+/*   Updated: 2025/08/07 21:25:55 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,12 @@ static int	init_philo(t_simulation	*sim)
 		return (return_err("Ups! init error occurred"));
 	while (++i < sim->num_philo)
 	{
-		sim->philo[i].id = i;
+		sim->philo[i].id = i + 1;
 		sim->philo[i].eat_count = 0;
 		sim->philo[i].thread = 0; //? niçin var. can be problem?
 		sim->philo[i].right_fork = NULL;
 		sim->philo[i].left_fork = NULL;
 		sim->philo[i].last_meal_time = 0;
-		//sim->philo[i].is_eating = false;
 		sim->philo[i].simulation = sim; //? gerek var mı
 	}
 	return (0);
@@ -78,7 +77,6 @@ static int	init_input(int argc, char **argv, t_simulation *sim)
 	sim->time_to_sleep = ft_atoi(argv[4]);
 	sim->is_dead = false;
 	sim->start_time = 0;
-	sim->simulation_end = false;
 	sim->philo = NULL;
 	sim->forks = NULL;
 	if (argc == 6)
@@ -92,17 +90,13 @@ static int	init_mutexes(t_simulation *sim)
 {
 	sim->write_mutex = malloc(sizeof(pthread_mutex_t));
 	sim->dead_lock = malloc(sizeof(pthread_mutex_t));
-	sim->meal_mutex = malloc(sizeof(pthread_mutex_t));
-	sim->end_mutex = malloc(sizeof(pthread_mutex_t));
 
-	if (!sim->write_mutex || !sim->dead_lock || \
-		!sim->meal_mutex)
+	if (!sim->write_mutex || !sim->dead_lock)
 		return (return_err("Mutex memory allocation failed")); //? memory leak'e karşı önlem al!
 
-	pthread_mutex_init(sim->write_mutex, NULL);
-	pthread_mutex_init(sim->dead_lock, NULL);
-	pthread_mutex_init(sim->meal_mutex, NULL);
-	pthread_mutex_init(sim->end_mutex, NULL);
+	if (pthread_mutex_init(sim->write_mutex, NULL) != 0
+		|| pthread_mutex_init(sim->dead_lock, NULL) != 0)
+		return (return_err("Mutex initialization failed"));
 	return (0);
 }
 

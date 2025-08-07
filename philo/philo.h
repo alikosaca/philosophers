@@ -9,7 +9,6 @@
 # include <sys/time.h>
 # include <stdbool.h>
 # include <limits.h>
-
 # include <string.h>
 
 typedef enum	s_status
@@ -36,7 +35,6 @@ typedef struct	s_philosopher
 	t_fork				*right_fork;
 	t_fork				*left_fork;
 	long long			last_meal_time;
-	//bool				is_eating;
 	struct s_simulation	*simulation;
 }				t_philosopher;
 
@@ -48,16 +46,12 @@ typedef struct	s_simulation
 	int				time_to_sleep;			//Bir filozofun uyuduğu süre
 	int				number_of_meals;		//Her filozofun en az bu kadar kez yemek yemesi gerekir "isteğe bağlı".
 	bool			is_dead;
-	bool			simulation_end; //? gerek var mı?
 	long long		start_time;
 
 	pthread_mutex_t	*write_mutex;			/*ekrana yazma işlemi gerçekleşirken bir ekrana yazan işlemin bitmesini bekiyoruz. yani diyelim ki A filozofunun uyuduğunu ekrana yazacağız. onu lock yaparıyrouz. aynı anda birden fazla filozof yapmış olduğu durumu ekrana yazmasını engelemek/karışıklık olmasını engellemek için kullanıyoruz*/
 	pthread_mutex_t	*dead_lock;
-	pthread_mutex_t	*meal_mutex;
-	pthread_mutex_t	*end_mutex;
-
 	t_philosopher	*philo;
-	t_fork			*forks; //? gerek var mı?
+	t_fork			*forks;
 }				t_simulation;
 
 
@@ -73,7 +67,7 @@ int	validate_argument(int argc, char **argv);
 //utils
 int	ft_atoi(char *str);
 int	get_current_time(void);
-void	ft_usleep(long long time_in_ms);
+void	ft_usleep(long long time_in_ms, t_simulation *sim);
 void take_forks(t_philosopher *p);
 
 
@@ -95,9 +89,10 @@ void	*monitor_routine(void *arg);
 
 
 //routine
-int	think(t_philosopher *philo);
-int	dream(t_philosopher *philo);
-int	eat(t_philosopher *philo);
+void	think(t_philosopher *philo);
+void	dream(t_philosopher *philo);
+void	eat(t_philosopher *philo);
 
+int	check_simulation_end(t_simulation *sim);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:43:51 by akosaca           #+#    #+#             */
-/*   Updated: 2025/07/28 19:07:58 by akosaca          ###   ########.fr       */
+/*   Updated: 2025/08/07 17:47:25 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,27 +41,23 @@ int	get_current_time(void)
 {
 	struct timeval	tv;
 
-    if (gettimeofday(&tv, NULL) == -1)
-		write(2, "gettimeofday() error\n", 22);
-	//printf("tv_usec: %ld\n", (tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+	gettimeofday(&tv, NULL);
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
-void	ft_usleep(long long time_in_ms)
+void	ft_usleep(long long time_in_ms, t_simulation *sim)
 {
-	int	start;
+	long long	start;
 
 	start = get_current_time();
-	while ((get_current_time() - start) < time_in_ms)
-		usleep(500);
+	while ((get_current_time() - start) < time_in_ms && !check_simulation_end(sim))
+		usleep(50);
 }
 
-int	
+// int	
 // void take_forks(t_philosopher *p)
 // {
 // 	//! Yazılacak.
 // }
-
 // void	check_any_dead(t_simulation *sim)
 // {
-	
 // }
