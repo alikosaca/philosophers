@@ -6,7 +6,7 @@
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 18:06:28 by akosaca           #+#    #+#             */
-/*   Updated: 2025/08/07 21:26:13 by akosaca          ###   ########.fr       */
+/*   Updated: 2025/08/08 15:41:40 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	is_dead(t_simulation *sim)
 		last_meal_time = sim->philo[i].last_meal_time;
 		pthread_mutex_unlock(sim->dead_lock);
 		if (time - last_meal_time > sim->time_to_die
-			&& sim->philo[i].eat_count >= sim->number_of_meals)
+			&& (sim->philo[i].eat_count >= sim->number_of_meals))
 		{
 			pthread_mutex_lock(sim->dead_lock);
 			sim->is_dead = true;
@@ -68,13 +68,56 @@ static int	is_dead(t_simulation *sim)
 	}
 	return (0);
 }
+static bool	is_ate(t_simulation *sim)
+{
+	int			i;
+	long long	finish_time;
+	bool		every_philo_ate;
+	int tmp1;
+	int tmp2;
+
+	i = -1;
+	every_philo_ate = true;
+	if (sim->number_of_meals > 0)
+	{
+		while (++i < sim->num_philo)
+		{
+			pthread_mutex_lock(sim->dead_lock);
+			if (sim->philo[i].eat_count >= sim->number_of_meals)
+			{
+				tmp1 = sim->philo[i].eat_count;
+				tmp2 = sim->number_of_meals;
+				every_philo_ate = false;
+				
+			}
+			pthread_mutex_unlock(sim->dead_lock);
+		}	
+		if (every_philo_ate)
+		{
+			finish_time = get_current_time() - sim->start_time;
+			printf("\n");
+			printf("\n");
+			printf("every_philo_ate: %d\n", every_philo_ate);
+			printf("%lld > timestamp\n", finish_time);
+			printf("\n");
+			printf("sim->philo[i].eat_count: %d\n", tmp1);
+			printf("sim->number_of_meals: %d\n", tmp2);
+			printf("\n");
+			printf("\n");
+			printf("\n");
+		}
+	}
+	else
+		return (false);
+	return (every_philo_ate);
+}
 
 void	*monitor_routine(void *arg)
 {
 	t_simulation	*sim;
 
 	sim = (t_simulation *)arg;
-	while (!is_dead(sim))
+	while (!is_dead(sim) && !is_ate(sim))
 		usleep(1000);
 	return (NULL);
 }
@@ -120,14 +163,16 @@ int	run_simulation(t_simulation *sim)
 	}
 	if (pthread_create(&monitor, NULL, monitor_routine, sim))
 		return (1);
-	if (pthread_join(monitor, NULL))
-		return (1);
+
 	i = -1;
 	while (++i < sim->num_philo)
 	{
 		if (pthread_join(sim->philo[i].thread, NULL))
 			return (1);
 	}
+	if (pthread_join(monitor, NULL))
+		return (1);
+	fprintf(stderr, "[DBG] run_simulation completed\n");
 	return (0);
 }
 

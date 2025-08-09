@@ -6,7 +6,7 @@
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 17:55:12 by akosaca           #+#    #+#             */
-/*   Updated: 2025/08/07 21:26:07 by akosaca          ###   ########.fr       */
+/*   Updated: 2025/08/08 15:52:58 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ void	eat(t_philosopher *philo)
 	print_message("has taken a fork right", philo);
 	print_message("is eating", philo);
 	pthread_mutex_lock(philo->simulation->dead_lock);
-	philo->last_meal_time = get_current_time();
 	philo->eat_count++;
+	philo->last_meal_time = get_current_time();
 	pthread_mutex_unlock(philo->simulation->dead_lock);
 	ft_usleep(philo->simulation->time_to_eat, philo->simulation);
 	pthread_mutex_unlock(first_fork);

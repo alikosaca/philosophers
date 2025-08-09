@@ -74,7 +74,6 @@ void take_forks(t_philosopher *p);
 //Error
 int		return_err(const char *message);
 int		cleanup(t_simulation *sim);
-void	destroy_mutex(t_simulation *sim);
 
 
 //handle
