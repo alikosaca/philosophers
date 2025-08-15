@@ -66,7 +66,7 @@ int	validate_argument(int argc, char **argv);
 
 //utils
 int	ft_atoi(char *str);
-int	get_current_time(void);
+long long	get_current_time(void);
 void	ft_usleep(long long time_in_ms, t_simulation *sim);
 void take_forks(t_philosopher *p);
 
@@ -85,12 +85,15 @@ void	print_fork_taken(t_simulation *sim);
 int		run_simulation(t_simulation *sim);
 void	*philo_routine(void *arg);
 void	*monitor_routine(void *arg);
+int		is_enough(t_philosopher *philo);
 
 
 //routine
 void	think(t_philosopher *philo);
 void	dream(t_philosopher *philo);
 void	eat(t_philosopher *philo);
+void	is_one_philo(t_philosopher *philo);
+
 
 int	check_simulation_end(t_simulation *sim);
 

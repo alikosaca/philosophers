@@ -6,7 +6,7 @@
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:43:51 by akosaca           #+#    #+#             */
-/*   Updated: 2025/08/07 17:47:25 by akosaca          ###   ########.fr       */
+/*   Updated: 2025/08/14 22:45:50 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	ft_atoi(char *str)
 	return (res * sign);
 }
 
-int	get_current_time(void)
+long long	get_current_time(void)
 {
 	struct timeval	tv;
 

@@ -6,20 +6,19 @@
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 18:06:28 by akosaca           #+#    #+#             */
-/*   Updated: 2025/08/08 15:41:40 by akosaca          ###   ########.fr       */
+/*   Updated: 2025/08/15 02:23:43 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int	is_enough(t_philosopher *philo)
+int	is_enough(t_philosopher *philo)
 {
 	int	eat_count;
 
 	pthread_mutex_lock(philo->simulation->dead_lock);
 	eat_count = philo->eat_count;
 	pthread_mutex_unlock(philo->simulation->dead_lock);
-	printf("philo[%d] yemek sayısı[%d] \n", philo->id, eat_count);
 	if (eat_count >= philo->simulation->number_of_meals)
 		return (1);
 	return (0);
@@ -39,11 +38,14 @@ int	check_simulation_end(t_simulation *sim)
 	return (0);
 }
 
+
+
 static int	is_dead(t_simulation *sim)
 {
 	int			i;
 	long long	time;
 	long long	dead_time;
+	//long long	eat_count;
 	long long	last_meal_time;
 
 	i = -1;
@@ -52,64 +54,50 @@ static int	is_dead(t_simulation *sim)
 		time = get_current_time();
 		pthread_mutex_lock(sim->dead_lock);
 		last_meal_time = sim->philo[i].last_meal_time;
+		//eat_count = sim->philo[i].eat_count; //eklendi
 		pthread_mutex_unlock(sim->dead_lock);
-		if (time - last_meal_time > sim->time_to_die
-			&& (sim->philo[i].eat_count >= sim->number_of_meals))
+		if (sim->number_of_meals > 0) // && eat_count >= sim->number_of_meals
+			continue; //eklendi
+		if (time - last_meal_time >= sim->time_to_die)
 		{
 			pthread_mutex_lock(sim->dead_lock);
 			sim->is_dead = true;
 			pthread_mutex_unlock(sim->dead_lock);
 			dead_time = time - sim->start_time;
 			pthread_mutex_lock(sim->write_mutex);
-			printf("%lld | %d > died\n", dead_time, sim->philo[i].id);
+			printf("%lld %d > died\n", dead_time, sim->philo[i].id);
 			pthread_mutex_unlock(sim->write_mutex);
 			return (1);
 		}
 	}
 	return (0);
 }
+
 static bool	is_ate(t_simulation *sim)
 {
 	int			i;
-	long long	finish_time;
-	bool		every_philo_ate;
-	int tmp1;
-	int tmp2;
+	bool		all_ate;
 
-	i = -1;
-	every_philo_ate = true;
-	if (sim->number_of_meals > 0)
-	{
-		while (++i < sim->num_philo)
-		{
-			pthread_mutex_lock(sim->dead_lock);
-			if (sim->philo[i].eat_count >= sim->number_of_meals)
-			{
-				tmp1 = sim->philo[i].eat_count;
-				tmp2 = sim->number_of_meals;
-				every_philo_ate = false;
-				
-			}
-			pthread_mutex_unlock(sim->dead_lock);
-		}	
-		if (every_philo_ate)
-		{
-			finish_time = get_current_time() - sim->start_time;
-			printf("\n");
-			printf("\n");
-			printf("every_philo_ate: %d\n", every_philo_ate);
-			printf("%lld > timestamp\n", finish_time);
-			printf("\n");
-			printf("sim->philo[i].eat_count: %d\n", tmp1);
-			printf("sim->number_of_meals: %d\n", tmp2);
-			printf("\n");
-			printf("\n");
-			printf("\n");
-		}
-	}
-	else
+	if (sim->number_of_meals <= 0)
 		return (false);
-	return (every_philo_ate);
+	i = -1;
+	all_ate = true;
+	while (++i < sim->num_philo)
+	{
+		pthread_mutex_lock(sim->dead_lock);
+		if (sim->philo[i].eat_count < sim->number_of_meals)
+			all_ate = false;
+		pthread_mutex_unlock(sim->dead_lock);
+		if (!all_ate)
+			break ;
+	}	
+	if (all_ate)
+	{
+		pthread_mutex_lock(sim->dead_lock);
+		sim->is_dead = true;
+		pthread_mutex_unlock(sim->dead_lock);
+	}
+	return (all_ate);
 }
 
 void	*monitor_routine(void *arg)
@@ -118,7 +106,7 @@ void	*monitor_routine(void *arg)
 
 	sim = (t_simulation *)arg;
 	while (!is_dead(sim) && !is_ate(sim))
-		usleep(1000);
+		usleep(200);
 	return (NULL);
 }
 
@@ -130,16 +118,13 @@ void	*philo_routine(void *arg)
 	pthread_mutex_lock(philo->simulation->dead_lock);
 	philo->last_meal_time = get_current_time();
 	pthread_mutex_unlock(philo->simulation->dead_lock);
+	is_one_philo(philo);
 	if (philo->id % 2 == 0)
 		ft_usleep(philo->simulation->time_to_eat / 2, philo->simulation);
-	
 	while (!check_simulation_end(philo->simulation))
 	{
 		if (philo->simulation->number_of_meals > 0 && is_enough(philo))
-		{
-			printf("philo bitti id[%d] \n", philo->id);
 			return (NULL);
-		}
 		eat(philo);
 		dream(philo);
 		think(philo);
@@ -153,7 +138,6 @@ int	run_simulation(t_simulation *sim)
 	pthread_t	monitor;
 	int			i;
 
-	printf("--------run simulation----------\n");
 	i = -1;
 	sim->start_time = get_current_time();
 	while (++i < sim->num_philo)
@@ -172,7 +156,6 @@ int	run_simulation(t_simulation *sim)
 	}
 	if (pthread_join(monitor, NULL))
 		return (1);
-	fprintf(stderr, "[DBG] run_simulation completed\n");
 	return (0);
 }
 
