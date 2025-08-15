@@ -6,7 +6,7 @@
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 17:55:12 by akosaca           #+#    #+#             */
-/*   Updated: 2025/08/08 15:52:58 by akosaca          ###   ########.fr       */
+/*   Updated: 2025/08/15 02:30:25 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,27 @@ void	dream(t_philosopher *philo)
 	ft_usleep(philo->simulation->time_to_sleep, philo->simulation);
 }
 
-void	eat(t_philosopher *philo) 
+void	is_one_philo(t_philosopher *philo)
+{
+	if (philo->right_fork == philo->left_fork)
+	{
+		pthread_mutex_lock(&philo->left_fork->mutex);
+		print_message("has taken a fork", philo);
+		ft_usleep(philo->simulation->time_to_die, philo->simulation);
+		pthread_mutex_unlock(&philo->left_fork->mutex);
+		pthread_mutex_lock(philo->simulation->dead_lock);
+		philo->simulation->is_dead = true;
+		pthread_mutex_unlock(philo->simulation->dead_lock);
+	}
+}
+
+// if (check_simulation_end(philo->simulation))//eklendi
+// 	return ;
+void eat(t_philosopher *philo)
 {
 	pthread_mutex_t	*first_fork;
 	pthread_mutex_t	*second_fork;
 
-	if (check_simulation_end(philo->simulation))
-		return ;
-	//printf("id: %d\n", philo->id);
 	if (philo->id % 2 == 0)
 	{
 		first_fork = &philo->right_fork->mutex;
@@ -46,9 +59,9 @@ void	eat(t_philosopher *philo)
 		second_fork = &philo->right_fork->mutex;
 	}
 	pthread_mutex_lock(first_fork);
-	print_message("has taken a fork left", philo);
+	print_message("has taken a fork", philo);
 	pthread_mutex_lock(second_fork);
-	print_message("has taken a fork right", philo);
+	print_message("has taken a fork", philo);
 	print_message("is eating", philo);
 	pthread_mutex_lock(philo->simulation->dead_lock);
 	philo->eat_count++;
@@ -58,6 +71,43 @@ void	eat(t_philosopher *philo)
 	pthread_mutex_unlock(first_fork);
 	pthread_mutex_unlock(second_fork);
 }
+
+	// if (check_simulation_end(philo->simulation))//eklendi
+	// {
+	// 	pthread_mutex_unlock(first_fork);
+	// 	return;
+	// }
+
+
+	// if (philo->simulation->number_of_meals > 0 && is_enough(philo))//eklendi 72. satır
+    // {
+    //     pthread_mutex_unlock(first_fork);
+    //     pthread_mutex_unlock(second_fork);
+    //     return;
+    // }
+
+
+
+
+
+
+
+	// if (philo->left_fork == philo->right_fork) //! tek filo gelirse, başka fonksiyona ayır
+	// {
+	// 	pthread_mutex_lock(&philo->left_fork->mutex);
+	// 	print_message("has taken a fork", philo);
+	// 	ft_usleep(philo->simulation->time_to_die, philo->simulation);
+	// 	pthread_mutex_unlock(&philo->left_fork->mutex);
+	// 	philo->simulation->is_dead = true;
+	// 	if (check_simulation_end(philo->simulation))
+	// 		return ;
+	// }
+
+
+
+
+
+
 
 
 // void	eat(t_philosopher *philo) 
