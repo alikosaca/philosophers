@@ -41,9 +41,9 @@ typedef struct	s_philosopher
 typedef struct	s_simulation
 {
 	int				num_philo;				//Filozof sayısı
-	int				time_to_die;			//Bir filozofun son yediği yemekten itibaren bu süre içinde yemek yememesi durumunda öleceği süre
-	int				time_to_eat;			//Bir filozofun yemek yediği süre
-	int				time_to_sleep;			//Bir filozofun uyuduğu süre
+	long long		time_to_die;			//Bir filozofun son yediği yemekten itibaren bu süre içinde yemek yememesi durumunda öleceği süre
+	long long		time_to_eat;			//Bir filozofun yemek yediği süre
+	long long		time_to_sleep;			//Bir filozofun uyuduğu süre
 	int				number_of_meals;		//Her filozofun en az bu kadar kez yemek yemesi gerekir "isteğe bağlı".
 	bool			is_dead;
 	long long		start_time;
@@ -68,7 +68,9 @@ int	validate_argument(int argc, char **argv);
 int	ft_atoi(char *str);
 long long	get_current_time(void);
 void	ft_usleep(long long time_in_ms, t_simulation *sim);
-void take_forks(t_philosopher *p);
+//void take_forks(t_philosopher *p);
+char	*ft_strchr(const char *s, int c);
+int		ft_isdigit(int c);
 
 
 //Error
