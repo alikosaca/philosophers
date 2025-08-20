@@ -6,23 +6,11 @@
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 18:06:28 by akosaca           #+#    #+#             */
-/*   Updated: 2025/08/15 02:23:43 by akosaca          ###   ########.fr       */
+/*   Updated: 2025/08/20 15:40:40 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-int	is_enough(t_philosopher *philo)
-{
-	int	eat_count;
-
-	pthread_mutex_lock(philo->simulation->dead_lock);
-	eat_count = philo->eat_count;
-	pthread_mutex_unlock(philo->simulation->dead_lock);
-	if (eat_count >= philo->simulation->number_of_meals)
-		return (1);
-	return (0);
-}
 
 int	check_simulation_end(t_simulation *sim)
 {
@@ -45,8 +33,8 @@ static int	is_dead(t_simulation *sim)
 	int			i;
 	long long	time;
 	long long	dead_time;
-	//long long	eat_count;
 	long long	last_meal_time;
+	//long long	fp;
 
 	i = -1;
 	while (++i < sim->num_philo)
@@ -54,12 +42,15 @@ static int	is_dead(t_simulation *sim)
 		time = get_current_time();
 		pthread_mutex_lock(sim->dead_lock);
 		last_meal_time = sim->philo[i].last_meal_time;
-		//eat_count = sim->philo[i].eat_count; //eklendi
 		pthread_mutex_unlock(sim->dead_lock);
-		if (sim->number_of_meals > 0) // && eat_count >= sim->number_of_meals
-			continue; //eklendi
-		if (time - last_meal_time >= sim->time_to_die)
+		//printf("time: %lld\n", (time - last_meal_time));
+		//printf("end: %lld\n", sim->time_to_die);
+		if ((time - last_meal_time) > sim->time_to_die)
 		{
+			printf("---------------------------\n");
+			printf("time: %lld\n", (time - last_meal_time));
+			printf("end: %lld\n", sim->time_to_die);
+			printf("---------------------------\n");
 			pthread_mutex_lock(sim->dead_lock);
 			sim->is_dead = true;
 			pthread_mutex_unlock(sim->dead_lock);
@@ -119,12 +110,12 @@ void	*philo_routine(void *arg)
 	philo->last_meal_time = get_current_time();
 	pthread_mutex_unlock(philo->simulation->dead_lock);
 	is_one_philo(philo);
-	if (philo->id % 2 == 0)
+	if (philo->simulation->num_philo % 2 == 0 && philo->id % 2 == 0)
 		ft_usleep(philo->simulation->time_to_eat / 2, philo->simulation);
+	else if (philo->simulation->num_philo % 2 == 1 && philo->id % 2 == 0)
+		ft_usleep(philo->simulation->time_to_eat, philo->simulation);
 	while (!check_simulation_end(philo->simulation))
 	{
-		if (philo->simulation->number_of_meals > 0 && is_enough(philo))
-			return (NULL);
 		eat(philo);
 		dream(philo);
 		think(philo);
@@ -135,28 +126,51 @@ void	*philo_routine(void *arg)
 
 int	run_simulation(t_simulation *sim)
 {
-	pthread_t	monitor;
-	int			i;
+    pthread_t	monitor;
+    int			i;
 
 	i = -1;
 	sim->start_time = get_current_time();
-	while (++i < sim->num_philo)
-	{
-		if (pthread_create(&sim->philo[i].thread, NULL, philo_routine, &sim->philo[i]))
-			return (1);
-	}
-	if (pthread_create(&monitor, NULL, monitor_routine, sim))
-		return (1);
-
-	i = -1;
-	while (++i < sim->num_philo)
-	{
-		if (pthread_join(sim->philo[i].thread, NULL))
-			return (1);
-	}
-	if (pthread_join(monitor, NULL))
-		return (1);
-	return (0);
+    while (++i < sim->num_philo)
+    {
+        if (pthread_create(&sim->philo[i].thread, NULL, philo_routine, &sim->philo[i]))
+            return (1);
+    }
+    if (pthread_create(&monitor, NULL, monitor_routine, sim))
+        return (1);
+    i = -1;
+    while (++i < sim->num_philo)
+    {
+        if (pthread_join(sim->philo[i].thread, NULL))
+            return (1);
+    }
+    if (pthread_join(monitor, NULL))
+        return (1);
+    return (0);
 }
 
 
+
+
+// void	*philo_routine(void *arg)
+// {
+// 	t_philosopher	*philo;
+
+// 	philo = (t_philosopher *)arg;
+// 	pthread_mutex_lock(philo->simulation->dead_lock);
+// 	philo->last_meal_time = get_current_time();
+// 	pthread_mutex_unlock(philo->simulation->dead_lock);
+// 	is_one_philo(philo);
+// 	if (philo->id % 2 == 0)
+// 		ft_usleep(philo->simulation->time_to_eat / 2, philo->simulation);
+// 	while (!check_simulation_end(philo->simulation))
+// 	{
+// 		//if (philo->simulation->number_of_meals > 0) //is_enough(philo)
+// 		//	return (NULL);
+// 		eat(philo);
+// 		dream(philo);
+// 		think(philo);
+// 	}
+
+// 	return (NULL);
+// }
