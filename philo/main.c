@@ -6,7 +6,7 @@
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:07:37 by akosaca           #+#    #+#             */
-/*   Updated: 2025/08/14 20:44:04 by akosaca          ###   ########.fr       */
+/*   Updated: 2025/08/20 15:41:07 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ int main(int argc, char **argv)
 	if (validate_argument(argc, argv))
 		return (1);
 	if (init_sim(argc, argv, &sim))
+	{
 		cleanup(&sim);
+		return (1);
+	}
 	if (run_simulation(&sim))
 	{
 		cleanup(&sim);
