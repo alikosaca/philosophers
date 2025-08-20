@@ -6,7 +6,7 @@
 /*   By: akosaca <akosaca@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:43:51 by akosaca           #+#    #+#             */
-/*   Updated: 2025/08/14 22:45:50 by akosaca          ###   ########.fr       */
+/*   Updated: 2025/08/20 15:53:25 by akosaca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ int	ft_atoi(char *str)
 	i = 0;
 	sign = 1;
 	res = 0;
+	while (str[i] == '\t' || str[i] == '\n' || str[i] == '\v' || str[i] == '\f'
+		|| str[i] == '\r' || str[i] == ' ')
+		i++;
 	while (str[i] == '-' || str[i] == '+')
 	{
 		if (str[i] == '-')
@@ -35,6 +38,27 @@ int	ft_atoi(char *str)
 	}
 
 	return (res * sign);
+}
+char	*ft_strchr(const char *s, int c)
+{
+	while (*s)
+	{
+		if (*s == (char)c)
+			return ((char *)s);
+		s++;
+	}
+	if ((char)c == '\0')
+	{
+		return ((char *)s);
+	}
+	return (NULL);
+}
+
+int	ft_isdigit(int c)
+{
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
 }
 
 long long	get_current_time(void)
@@ -52,12 +76,3 @@ void	ft_usleep(long long time_in_ms, t_simulation *sim)
 	while ((get_current_time() - start) < time_in_ms && !check_simulation_end(sim))
 		usleep(50);
 }
-
-// int	
-// void take_forks(t_philosopher *p)
-// {
-// 	//! Yazılacak.
-// }
-// void	check_any_dead(t_simulation *sim)
-// {
-// }
